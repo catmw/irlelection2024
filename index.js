@@ -16,6 +16,26 @@ app.get("/summary", function(req,res){
     db.getSummary(req,res);
 });
 
+app.get('/', (req,res)=> {
+  res.sendFile(__dirname + '/public/routes.html');
+});
+
+app.get("/parties", function(req,res){   
+  db.getParties(req,res);
+});
+
+app.get("/candidates", (req, res) => {
+  db.getCandidates(req,res);
+});
+
+app.get("/candidates/party/:PARTY_MNEMONIC", (req, res) => {
+  db.getCandidatesMN(req,res);
+});
+
+app.get("/candidates/constituency/:CONSTITUENCY", (req, res) => {
+  db.getCandidatesCons(req,res);
+});
+
 var myServer = app.listen(3000, function() {
   console.log("IRLElection2024 Server listening on port 3000...");
 });
