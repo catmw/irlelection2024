@@ -13,10 +13,13 @@ $(document).ready(function () {
                 const bgColour = party.PARTYCOLOUR;
 
                 $boxes.append(`
-                    <div class="col-md-1 text-center text-white m-1 p-2 rounded" style="background-color: ${bgColour};">
-                        <h6>${party.PARTY_MNEMONIC}</h6>
-                        <p>${party.SEATS_WON_2024}</p>
-                        <h6>Seats</h6>
+                    <div class="col-md-1 text-center m-1 p-0">
+                        <svg width="100%" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" rx="10" fill="${bgColour}" />
+                            <text x="50" y="35" text-anchor="middle" fill="white" font-size="12" font-weight="bold">${party.PARTY_MNEMONIC}</text>
+                            <text x="50" y="55" text-anchor="middle" fill="white" font-size="14">${party.SEATS_WON_2024}</text>
+                            <text x="50" y="75" text-anchor="middle" fill="white" font-size="12">Seats</text>
+                        </svg>
                     </div>
                 `);
 

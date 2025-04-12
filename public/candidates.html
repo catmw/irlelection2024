@@ -14,18 +14,26 @@
 <div class="container mt-4">
 <h1>Candidates</h1>
 
-<table class="table table-striped mt-4">
+  <table class="table table-striped mt-4">
     <thead>
         <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Party</th>
-            <th>Constituency</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>
+            Party
+            <select id="partyFilter" class="form-select form-select-sm mt-1">
+              <option value="All">All</option>
+            </select>
+          </th>
+          <th>
+            Constituency
+            <select id="constituencyFilter" class="form-select form-select-sm mt-1">
+              <option value="All">All</option>
+            </select>
+          </th>
         </tr>
-    </thead>
+      </thead>
     <tbody id="summaryTable"></tbody>
-</table>
+  </table>
 </div>
-
-</body>
 </html>
