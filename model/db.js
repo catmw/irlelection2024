@@ -17,22 +17,39 @@ exports.getSummary = function(req,res){
 
     connection.query("SELECT * FROM nationalsummary", function(err, rows, fields) {
         if (err) throw err;
-        res.send(JSON.stringify(rows));        
+        res.json(rows);     
     });
-	
 }
+
+exports.getSummaryWithColour = function(req, res) {
+  connection.query(`
+      SELECT ns.*, p.PARTYCOLOUR
+      FROM nationalsummary ns
+      JOIN parties p ON ns.PARTY_MNEMONIC = p.PARTY_MNEMONIC
+  `, function(err, rows) {
+      if (err) throw err;
+      res.json(rows);
+  });
+};
 
 exports.getParties = function(req,res){
   connection.query("SELECT * FROM parties", function(err, rows, fields){
     if (err) throw err;
-        res.send(JSON.stringify(rows));     
+      res.json(rows);    
   });
 }
+
+exports.getPartiesOrdered = function(req, res) {
+  connection.query("SELECT PARTY_MNEMONIC, PARTYNAME FROM parties ORDER BY PARTY_MNEMONIC ASC", function(err, rows) {
+      if (err) throw err;
+      res.json(rows);
+  });
+};
 
 exports.getCandidates = function(req,res){
   connection.query("SELECT * FROM candidates", function(err,rows,field){
     if (err) throw err;
-    res.send(JSON.stringify(rows));
+      res.json(rows);
   });
 }
 
@@ -40,7 +57,7 @@ exports.getCandidatesMN = function(req,res){
   const partyMN = req.params.PARTY_MNEMONIC;
   connection.query("SELECT * FROM candidates WHERE party_mnemonic = ?", [partyMN], function(err,rows,field){
     if (err) throw err;
-    res.send(JSON.stringify(rows));
+      res.json(rows);
   });
 }
 
@@ -48,6 +65,6 @@ exports.getCandidatesCons = function(req,res){
   const cons = req.params.CONSTITUENCY;
   connection.query("SELECT * FROM candidates WHERE constituency = ?", [cons], function(err,rows,field){
     if (err) throw err;
-    res.send(JSON.stringify(rows));
+      res.json(rows); 
   });
 }
