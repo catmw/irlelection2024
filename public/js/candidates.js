@@ -4,12 +4,23 @@ $(document).ready(function () {
     const constituencyFilter = $("#constituencyFilter");
   
     let candidates = [];
+    let partyMap = {};
   
     function fetchCandidates() {
       $.get("http://localhost:3000/candidates", function (data) {
         candidates = data;
+        fetchParties();
+      });
+    }
+  
+    function fetchParties() {
+      $.get("http://localhost:3000/parties", function (data) {
+        data.forEach(party => {
+          partyMap[party.PARTY_MNEMONIC] = party.PARTYNAME;
+        });
+  
         fillFilters();
-        createTable(data);
+        createTable(candidates);
       });
     }
   
@@ -25,17 +36,19 @@ $(document).ready(function () {
           constituencySet.add(candidate.CONSTITUENCY);
         }
       });
+
+      partyFilter.append(`<option value="All">All</option>`);
+      [...partySet].sort().forEach(mnemonic => {
+        const name = partyMap[mnemonic] || mnemonic;
+        partyFilter.append(`<option value="${mnemonic}">${name}</option>`);
+      });
   
-      partyFilter.append(
-        [...partySet].sort().map(party => `<option value="${party}">${party}</option>`)
-      );
-  
-      constituencyFilter.append(
-        [...constituencySet].sort().map(cons => `<option value="${cons}">${cons}</option>`)
-      );
+      constituencyFilter.append(`<option value="All">All</option>`);
+      [...constituencySet].sort().forEach(cons => {
+        constituencyFilter.append(`<option value="${cons}">${cons}</option>`);
+      });
     }
   
-
     function createTable(data) {
       tableBody.empty();
       data.forEach((candidate, index) => {
