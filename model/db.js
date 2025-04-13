@@ -35,7 +35,7 @@ exports.getSummaryWithColour = function(req, res) {
 exports.getParties = function(req,res){
   connection.query("SELECT * FROM parties", function(err, rows, fields){
     if (err) throw err;
-      res.json(rows);    
+    res.json(rows);    
   });
 }
 
@@ -49,7 +49,7 @@ exports.getPartiesOrdered = function(req, res) {
 exports.getCandidates = function(req,res){
   connection.query("SELECT * FROM candidates", function(err,rows,field){
     if (err) throw err;
-      res.json(rows);
+    res.json(rows);
   });
 }
 
@@ -57,7 +57,7 @@ exports.getCandidatesMN = function(req,res){
   const partyMN = req.params.PARTY_MNEMONIC;
   connection.query("SELECT * FROM candidates WHERE party_mnemonic = ?", [partyMN], function(err,rows,field){
     if (err) throw err;
-      res.json(rows);
+    res.json(rows);
   });
 }
 
@@ -65,6 +65,23 @@ exports.getCandidatesCons = function(req,res){
   const cons = req.params.CONSTITUENCY;
   connection.query("SELECT * FROM candidates WHERE constituency = ?", [cons], function(err,rows,field){
     if (err) throw err;
-      res.json(rows); 
+    res.json(rows); 
   });
 }
+
+exports.getConstituencies = function(req, res){
+  connection.query("SELECT * FROM constituencies", function(err, rows,field){
+    if (err)throw err;
+    res.json(rows)
+  })
+}
+
+exports.loginAdmin = function(req,res){
+  const {email, password} = req.body;
+  connection.query("SELECT * FROM admin WHERE email = ?", [email], function(err, results) {
+    if (err || results.length === 0 || results[0].password !== password) {
+      return res.json({ success: false });
+    }
+    res.json({ success: true });
+  });
+};

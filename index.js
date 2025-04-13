@@ -40,9 +40,18 @@ app.get("/candidates/party/:PARTY_MNEMONIC", (req, res) => {
   db.getCandidatesMN(req,res);
 });
 
-app.get("/candidates/constituency/:CONSTITUENCY", (req, res) => {
+app.get("/candidates/ ", (req, res) => {
   db.getCandidatesCons(req,res);
 });
+
+app.get("/constituencies", (req, res) => {
+  db.getConstituencies(req,res);
+});
+
+app.post("/login", function(req,res){
+  db.loginAdmin(req,res);
+});
+
 var myServer = app.listen(3000, function() {
   console.log("IRLElection2024 Server listening on port 3000...");
 });
