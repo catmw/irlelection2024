@@ -48,6 +48,8 @@ app.get("/constituencies", (req, res) => {
   db.getConstituencies(req,res);
 });
 
+app.get("/")
+
 app.post("/login", function(req,res){
   db.loginAdmin(req,res);
 });
