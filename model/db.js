@@ -120,6 +120,22 @@ ORDER BY Votes DESC`;
     })
 }
 
+exports.updatePartyName = function(req, res) {
+  const { PARTY_MNEMONIC, PARTYNAME } = req.body;
+
+  connection.query(
+    "UPDATE parties SET PARTYNAME = ? WHERE PARTY_MNEMONIC = ?",
+    [PARTYNAME, PARTY_MNEMONIC],
+    function(err, result) {
+      if (err) {
+        console.error("Error updating party name:", err);
+        return res.json({ success: false });
+      }
+      res.json({ success: true });
+    }
+  );
+};
+
 exports.loginAdmin = function(req,res){
   const {email, password} = req.body;
   connection.query("SELECT * FROM admin WHERE email = ?", [email], function(err, results) {

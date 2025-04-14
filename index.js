@@ -54,6 +54,10 @@ app.get("/constituencies", (req, res) => {
 
 app.get("/")
 
+app.post("/parties/update", function(req, res) {
+  db.updatePartyName(req, res);
+});
+
 app.post("/login", function(req,res){
   db.loginAdmin(req,res);
 });
