@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    const mapContainer = d3.select("#map");
 
     $.ajax({
         url: "http://localhost:3000/constituencies",
         method: "GET",
         success: function (data) {
-            const $table = $("#conTable");
+            const $table = $("#conCanTable");
 
             data.forEach(constituency => {
                 $table.append(`
@@ -25,25 +24,4 @@ $(document).ready(function () {
             console.error("Error fetching constituencies:", err);
         }
     });
-
-    function drawConstituencyMap(constituencies) {
-        mapContainer.selectAll("*").remove();
-
-        const svg = mapContainer.append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .attr("viewBox", "500 0 200 200");
-
-        constituencies.forEach(constituency => {
-            svg.append("path")
-                .attr("d", constituency.PATH)
-                .attr("fill", "#808080")
-                .attr("stroke", "#222422")
-                .attr("stroke-width", 0.2)
-                .attr("data-name", constituency.NAME)
-                .on("click", function () {
-                    window.location.href = `constituency?code=${constituency.CONSTITUENCY}`;
-                });
-        });
-    }
 });
