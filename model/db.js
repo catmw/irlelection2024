@@ -76,6 +76,50 @@ exports.getConstituencies = function(req, res){
   })
 }
 
+exports.getConstituencyCounts = function(req, res){
+  const cons = req.params.CONSTITUENCY;
+  console.log("Requested constituency:", cons);
+  const sql =`SELECT 
+  Party,
+  Votes,
+  ROUND(Votes / TotalVotes * 100, 2) AS Percentage
+FROM (
+  SELECT 
+    candidates.PARTY_MNEMONIC AS Party,
+    SUM(counts.NOVOTES) AS Votes,
+    (SELECT SUM(NOVOTES) 
+     FROM counts 
+     WHERE CONSTITUENCY = ? AND COUNTNUMBER = 1) AS TotalVotes
+  FROM counts
+  JOIN candidates 
+    ON counts.CONSTITUENCY = candidates.CONSTITUENCY 
+    AND counts.CANDIDATE_ID = candidates.CANDIDATE_ID
+  WHERE counts.CONSTITUENCY = ? AND counts.COUNTNUMBER = 1
+  GROUP BY candidates.PARTY_MNEMONIC
+) AS result
+ORDER BY Votes DESC`;
+  // const sql =`SELECT candidates.PARTY_MNEMONIC AS Party, counts.NOVOTES AS Votes
+  //   FROM counts JOIN candidates
+  //   ON counts.CONSTITUENCY = candidates.CONSTITUENCY
+  //   JOIN constituencies
+  //   ON candidates.CONSTITUENCY = constituencies.CONSTITUENCY
+  //   WHERE counts.CONSTITUENCY = ? AND counts.COUNTNUMBER = 1
+  //   GROUP BY candidates.PARTY_MNEMONIC
+  //   ORDER BY Votes DESC;
+  //   `;
+//   const sql =`SELECT candidates.PARTY_MNEMONIC AS Party, SUM(counts.NOVOTES) AS Votes
+// FROM counts 
+// JOIN candidates ON counts.CONSTITUENCY = candidates.CONSTITUENCY 
+//   AND counts.CANDIDATE_ID = candidates.CANDIDATE_ID
+// WHERE counts.CONSTITUENCY = ?
+// GROUP BY candidates.PARTY_MNEMONIC
+// ORDER BY Votes DESC`;
+    connection.query(sql, [cons, cons], function(err, rows, fields){
+      if (err) throw err;
+      res.json(rows)
+    })
+}
+
 exports.loginAdmin = function(req,res){
   const {email, password} = req.body;
   connection.query("SELECT * FROM admin WHERE email = ?", [email], function(err, results) {

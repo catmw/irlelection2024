@@ -42,7 +42,8 @@ $(document).ready(function () {
                 .attr("stroke-width", 0.2)
                 .attr("data-name", constituency.NAME)
                 .on("click", function () {
-                    window.location.href = `constituency?code=${constituency.CONSTITUENCY}`;
+                    //window.location.href = `/candidates/constituency/${constituency.CONSTITUENCY}`;
+                    window.location.href = `consDetail.html?constituency=${constituency.CONSTITUENCY}`;
                 });
         });
     }
