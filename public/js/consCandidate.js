@@ -9,7 +9,8 @@ $(document).ready(function () {
             data.forEach(constituency => {
                 $table.append(`
                     <tr>
-                        <td>${constituency.NAME}</td>
+
+                        <td><a href="candidDetails.html?constituency=${constituency.CONSTITUENCY}">${constituency.NAME}</a></td>
                         <td>${constituency.NOSEATS}</td>
                         <td>${constituency.NOCANDIDATES}</td>
                         <td>${constituency.ELECTORATE}</td>

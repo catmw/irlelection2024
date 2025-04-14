@@ -40,6 +40,10 @@ app.get("/candidates/party/:PARTY_MNEMONIC", (req, res) => {
   db.getCandidatesMN(req,res);
 });
 
+app.get("/candidates/counts/:CONSTITUENCY", (req, res) => {
+  db.getCandidatesCounts(req,res);
+});
+
 app.get("/constituency/:CONSTITUENCY", (req, res) => {
   db.getConstituencyCounts(req,res);
 });

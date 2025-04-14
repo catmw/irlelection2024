@@ -18,7 +18,6 @@ $(document).ready(function () {
     function displayCounts(counts){
         const $table = $("#detailsTable");
         const svg = document.getElementById("barChart");
-        const chartWidth = 600;
         const chartHeight = 300;
         const barWidth = 30;
         const barSpacing = 20;

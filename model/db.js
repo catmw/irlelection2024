@@ -98,26 +98,27 @@ FROM (
   GROUP BY candidates.PARTY_MNEMONIC
 ) AS result
 ORDER BY Votes DESC`;
-  // const sql =`SELECT candidates.PARTY_MNEMONIC AS Party, counts.NOVOTES AS Votes
-  //   FROM counts JOIN candidates
-  //   ON counts.CONSTITUENCY = candidates.CONSTITUENCY
-  //   JOIN constituencies
-  //   ON candidates.CONSTITUENCY = constituencies.CONSTITUENCY
-  //   WHERE counts.CONSTITUENCY = ? AND counts.COUNTNUMBER = 1
-  //   GROUP BY candidates.PARTY_MNEMONIC
-  //   ORDER BY Votes DESC;
-  //   `;
-//   const sql =`SELECT candidates.PARTY_MNEMONIC AS Party, SUM(counts.NOVOTES) AS Votes
-// FROM counts 
-// JOIN candidates ON counts.CONSTITUENCY = candidates.CONSTITUENCY 
-//   AND counts.CANDIDATE_ID = candidates.CANDIDATE_ID
-// WHERE counts.CONSTITUENCY = ?
-// GROUP BY candidates.PARTY_MNEMONIC
-// ORDER BY Votes DESC`;
     connection.query(sql, [cons, cons], function(err, rows, fields){
       if (err) throw err;
       res.json(rows)
     })
+}
+
+exports.getCandidatesCounts = function(req,res){
+  const cons = req.params.CONSTITUENCY;
+  connection.query(`SELECT * FROM counts
+JOIN candidates ON counts.CANDIDATE_ID = candidates.CANDIDATE_ID
+WHERE counts.CONSTITUENCY = ?
+AND counts.COUNTNUMBER = (
+  SELECT MAX(coun.COUNTNUMBER)
+  FROM counts coun
+  WHERE coun.CANDIDATE_ID = counts.CANDIDATE_ID
+  AND coun.CONSTITUENCY = counts.CONSTITUENCY
+);`,
+     [cons], function(err, rows, fields){
+    if (err) throw err;
+    res.json(rows);
+  });
 }
 
 exports.updatePartyName = function(req, res) {
